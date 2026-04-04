@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RideCompare Bengaluru — Compare Ride Prices Instantly</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+ 
+  (function(){
+    emailjs.init({ publicKey: "6HXmViNJ5CsAuWPLZ" });
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07070d; --surface:#0f0f1a; --card:#15152a;
+  --border:#252545; --accent:#00e5a0; --accent2:#6c63ff;
+  --text:#f0f0f5; --muted:#888899; --red:#ff5c72; --orange:#ff9f43;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,229,160,0.022)1px,transparent 1px),
+                   linear-gradient(90deg,rgba(0,229,160,0.022)1px,transparent 1px);
+  background-size:52px 52px;pointer-events:none;z-index:0;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(7,7,13,0.9);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:58px;}
+.nav-logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-1px;cursor:pointer;color:var(--text);}
+.nav-logo span{color:var(--accent);}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-link{padding:7px 15px;border-radius:8px;color:var(--muted);font-size:0.87rem;font-weight:500;cursor:pointer;border:none;background:none;font-family:'DM Sans',sans-serif;transition:all 0.18s;}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,0.06);}
+.nav-cta{background:rgba(0,229,160,0.12);border:1px solid rgba(0,229,160,0.3);color:var(--accent);font-size:0.8rem;font-weight:600;padding:6px 14px;border-radius:20px;cursor:pointer;border-style:solid;font-family:'DM Sans',sans-serif;transition:all 0.18s;}
+.nav-cta:hover{background:rgba(0,229,160,0.2);}
+
+/* ── HERO ── */
+#home{padding-top:58px;}
+.hero{position:relative;z-index:5;text-align:center;padding:64px 20px 36px;}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.22);color:var(--accent);font-size:0.73rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:20px;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;line-height:1.08;letter-spacing:-2px;margin-bottom:14px;}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{color:var(--muted);font-size:0.98rem;font-weight:300;max-width:460px;margin:0 auto 36px;line-height:1.6;}
+.hero-stats{display:flex;justify-content:center;gap:40px;margin-bottom:44px;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;color:var(--accent);}
+.stat-lbl{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-top:3px;}
+
+/* ── SEARCH ── */
+.search-wrap{position:relative;z-index:6;max-width:640px;margin:0 auto 28px;padding:0 18px;}
+.search-box{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:24px 24px 20px;box-shadow:0 20px 70px rgba(0,0,0,0.55);}
+.input-group{display:flex;flex-direction:column;gap:9px;margin-bottom:14px;}
+.ac-wrap{position:relative;}
+.input-row{position:relative;}
+.input-row .iicon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:0.95rem;pointer-events:none;z-index:2;}
+.input-row input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:12px 12px 12px 38px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.input-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,160,0.1);}
+.input-row input::placeholder{color:var(--muted);}
+.connector{padding:0 0 0 13px;margin:-1px 0;}
+.conn-line{width:2px;height:17px;background:linear-gradient(to bottom,var(--accent),var(--accent2));border-radius:2px;margin-left:4px;}
+.pill{display:none;align-items:center;gap:8px;background:rgba(0,229,160,0.07);border:1px solid rgba(0,229,160,0.2);border-radius:11px;padding:10px 12px 10px 38px;font-size:0.86rem;position:relative;min-height:44px;}
+.pill.show{display:flex;}
+.pill .pill-ico{position:absolute;left:13px;}
+.pill .pill-txt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pill .pill-x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.95rem;padding:0;flex-shrink:0;transition:color 0.15s;}
+.pill .pill-x:hover{color:var(--red);}
+
+/* dropdown */
+.sug-dd{position:absolute;top:calc(100%+5px);left:0;right:0;background:#14142a;border:1px solid var(--border);border-radius:13px;overflow:hidden;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.8);display:none;}
+.sug-dd.open{display:block;animation:dropIn 0.13s ease;}
+@keyframes dropIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+.sug-item{display:flex;align-items:center;gap:11px;padding:10px 13px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.1s;}
+.sug-item:last-of-type{border-bottom:none;}
+.sug-item:hover,.sug-item.hi{background:rgba(0,229,160,0.07);}
+.sug-ic{width:30px;height:30px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.14);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;}
+.sug-txt{flex:1;min-width:0;}
+.sug-name{font-size:0.84rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sug-name em{font-style:normal;color:var(--accent);}
+.sug-area{font-size:0.7rem;color:var(--muted);margin-top:1px;}
+.sug-type-badge{font-size:0.61rem;text-transform:uppercase;letter-spacing:.7px;color:var(--accent2);background:rgba(108,99,255,0.12);padding:2px 7px;border-radius:20px;flex-shrink:0;}
+.sug-footer{padding:7px 13px;background:rgba(0,0,0,0.3);font-size:0.67rem;color:var(--muted);border-top:1px solid var(--border);}
+.no-res{padding:14px;text-align:center;color:var(--muted);font-size:0.83rem;}
+
+/* type buttons */
+.type-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.type-btn{flex:1;min-width:72px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 5px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.79rem;cursor:pointer;text-align:center;transition:all 0.18s;}
+.type-btn span{display:block;font-size:1.3rem;margin-bottom:3px;}
+.type-btn.active,.type-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,229,160,0.07);}
+.compare-btn{width:100%;background:linear-gradient(135deg,var(--accent),#00c580);border:none;border-radius:11px;padding:15px;color:#000;font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;letter-spacing:.3px;}
+.compare-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,229,160,0.35);}
+.compare-btn:active{transform:none;}
+
+/* ── LOADING ── */
+.loading{text-align:center;padding:40px;display:none;}
+.loading.visible{display:block;}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;margin:0 auto 14px;animation:spin 0.75s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{color:var(--muted);font-size:0.87rem;}
+
+/* ── RESULTS ── */
+.results{position:relative;z-index:5;max-width:660px;margin:0 auto;padding:0 18px 60px;display:none;}
+.results.visible{display:block;animation:fadeUp 0.4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.res-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.res-header h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;}
+.route-info{color:var(--muted);font-size:0.81rem;}
+.route-info strong{color:var(--text);}
+.savings-bar{background:linear-gradient(135deg,rgba(0,229,160,0.08),rgba(108,99,255,0.08));border:1px solid rgba(0,229,160,0.18);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:0.87rem;}
+.savings-bar strong{color:var(--accent);}
+.app-list{display:flex;flex-direction:column;gap:9px;}
+.app-card{background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 17px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;text-decoration:none;color:inherit;}
+.app-card:hover{border-color:var(--accent);background:var(--card);transform:translateX(4px);box-shadow:0 4px 22px rgba(0,0,0,0.3),-4px 0 0 var(--accent);}
+.app-card.best{border-color:rgba(0,229,160,0.4);background:linear-gradient(135deg,rgba(0,229,160,0.05),rgba(108,99,255,0.04));}
+.best-tag{position:absolute;top:0;right:0;background:var(--accent);color:#000;font-size:0.6rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-bottom-left-radius:9px;}
+.app-logo{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.app-info{flex:1;min-width:0;}
+.app-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.93rem;}
+.app-sub{color:var(--muted);font-size:0.74rem;margin-top:2px;}
+.app-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.app-tag{font-size:0.62rem;text-transform:uppercase;letter-spacing:.6px;padding:2px 7px;border-radius:20px;}
+.tag-type{background:rgba(108,99,255,0.13);color:#a09fff;}
+.tag-nosurge{background:rgba(0,229,160,0.1);color:var(--accent);}
+.tag-parcel{background:rgba(255,159,67,0.12);color:var(--orange);}
+.app-price-col{text-align:right;flex-shrink:0;}
+.app-price{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;line-height:1;}
+.app-price.best-price{color:var(--accent);}
+.price-range{font-size:0.7rem;color:var(--muted);margin-top:2px;}
+.app-eta{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.book-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.77rem;cursor:pointer;transition:all 0.18s;flex-shrink:0;white-space:nowrap;}
+.app-card:hover .book-btn{background:var(--accent);color:#000;border-color:var(--accent);}
+.disclaimer{font-size:0.7rem;color:var(--muted);text-align:center;padding:14px 0 0;line-height:1.8;border-top:1px solid var(--border);margin-top:8px;}
+
+/* ── HOW IT WORKS ── */
+.how-section{position:relative;z-index:5;max-width:660px;margin:0 auto 0;padding:0 18px 80px;}
+.how-section h3{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--muted);margin-bottom:18px;text-align:center;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:480px){.steps{grid-template-columns:1fr;}}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:18px;text-align:center;}
+.step-num{width:32px;height:32px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;color:var(--accent);}
+.step strong{color:var(--text);display:block;margin-bottom:5px;font-size:0.87rem;}
+.step p{font-size:0.78rem;color:var(--muted);}
+
+/* ── ABOUT ── */
+#about{position:relative;z-index:5;max-width:900px;margin:0 auto;padding:80px 28px;}
+.section-label{font-size:0.73rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;letter-spacing:-1.5px;line-height:1.15;margin-bottom:16px;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+@media(max-width:680px){.about-grid{grid-template-columns:1fr;}}
+.about-text p{color:var(--muted);font-size:0.91rem;line-height:1.75;margin-bottom:14px;}
+.apps-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.app-chip{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:0.77rem;color:var(--muted);transition:all 0.18s;}
+.app-chip:hover{border-color:var(--accent);color:var(--accent);}
+.about-cards{display:flex;flex-direction:column;gap:12px;}
+.acard{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:16px 18px;display:flex;gap:13px;align-items:flex-start;transition:border-color 0.2s;}
+.acard:hover{border-color:rgba(0,229,160,0.3);}
+.acard-icon{font-size:1.5rem;flex-shrink:0;margin-top:2px;}
+.acard-title{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:4px;}
+.acard-desc{font-size:0.78rem;color:var(--muted);line-height:1.55;}
+
+/* ── CONTACT ── */
+#contact{position:relative;z-index:5;max-width:660px;margin:0 auto;padding:80px 28px 100px;}
+.contact-head{text-align:center;margin-bottom:36px;}
+.contact-head .section-label{display:block;}
+.contact-head p{color:var(--muted);font-size:0.91rem;margin-top:8px;}
+.cform-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:30px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr;}}
+.ff{display:flex;flex-direction:column;gap:5px;}
+.ff.full{grid-column:1/-1;}
+.ff label{font-size:0.78rem;font-weight:600;color:var(--muted);letter-spacing:.4px;}
+.ff input,.ff textarea,.ff select{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.87rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;width:100%;}
+.ff select option{background:var(--card);}
+.ff textarea{height:110px;resize:vertical;}
+.ff input:focus,.ff textarea:focus,.ff select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,160,0.1);}
+.ff input::placeholder,.ff textarea::placeholder{color:var(--muted);}
+.submit-btn{width:100%;background:linear-gradient(135deg,var(--accent),#00c580);border:none;border-radius:11px;padding:15px;color:#000;font-family:'Syne',sans-serif;font-size:0.93rem;font-weight:700;cursor:pointer;margin-top:6px;transition:transform 0.15s,box-shadow 0.15s;}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,229,160,0.3);}
+.submit-btn:active{transform:none;}
+
+/* success state */
+.form-success{display:none;text-align:center;padding:40px 20px;}
+.success-icon{font-size:3.5rem;margin-bottom:14px;animation:popIn 0.4s ease;}
+@keyframes popIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+.success-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:8px;}
+.success-sub{font-size:0.88rem;color:var(--muted);line-height:1.6;}
+.success-reset{margin-top:18px;background:none;border:1px solid var(--border);border-radius:8px;padding:8px 18px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.83rem;cursor:pointer;transition:all 0.18s;}
+.success-reset:hover{border-color:var(--accent);color:var(--accent);}
+
+
+/* ── SURGE INDICATOR ── */
+.surge-live{display:flex;align-items:center;gap:8px;background:rgba(255,159,67,0.1);border:1px solid rgba(255,159,67,0.3);border-radius:12px;padding:10px 16px;margin:0 18px 14px;max-width:640px;margin-left:auto;margin-right:auto;position:relative;z-index:5;}
+.surge-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;animation:surgePulse 1.2s infinite;}
+.surge-dot.high{background:#ff5c72;}
+.surge-dot.mid{background:var(--orange);}
+.surge-dot.low{background:var(--accent);}
+@keyframes surgePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.6)}}
+.surge-text{font-size:0.82rem;flex:1;}
+.surge-time{font-size:0.72rem;color:var(--muted);}
+
+/* ── FAV ROUTES ── */
+.fav-section{position:relative;z-index:5;max-width:640px;margin:0 auto 6px;padding:0 18px;}
+.fav-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.fav-header h4{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;}
+.fav-list{display:flex;gap:8px;flex-wrap:wrap;}
+.fav-chip{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:0.78rem;cursor:pointer;transition:all 0.18s;max-width:260px;}
+.fav-chip:hover{border-color:var(--accent);color:var(--accent);}
+.fav-chip .fc-del{color:var(--muted);font-size:0.75rem;margin-left:4px;flex-shrink:0;transition:color 0.15s;}
+.fav-chip .fc-del:hover{color:var(--red);}
+.fav-chip .fc-route{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.save-fav-btn{background:none;border:1px dashed var(--border);border-radius:20px;padding:6px 12px;color:var(--muted);font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.18s;}
+.save-fav-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── DARK/LIGHT TOGGLE ── */
+.theme-toggle{position:fixed;bottom:24px;right:24px;z-index:999;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.4);transition:all 0.2s;}
+.theme-toggle:hover{border-color:var(--accent);transform:scale(1.1);}
+body.light-mode{--bg:#f4f6f9;--surface:#ffffff;--card:#f0f2f5;--border:#dde2eb;--text:#0f0f1a;--muted:#6b7280;--accent:#00a572;--accent2:#4f46e5;}
+body.light-mode nav{background:rgba(244,246,249,0.92);}
+
+/* ── SHARE BUTTON ── */
+.share-btn{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--muted);font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.18s;}
+.share-btn:hover{border-color:var(--accent);color:var(--accent);}
+.share-toast{position:fixed;bottom:80px;right:24px;background:var(--accent);color:#000;font-size:0.82rem;font-weight:600;padding:10px 18px;border-radius:20px;z-index:9999;opacity:0;pointer-events:none;transition:opacity 0.3s;font-family:'Syne',sans-serif;}
+.share-toast.show{opacity:1;}
+
+/* ── PRICE ALERT ── */
+.price-alert{display:none;align-items:center;gap:8px;border-radius:12px;padding:10px 16px;margin-bottom:12px;font-size:0.83rem;}
+.price-alert.show{display:flex;}
+.price-alert.cheap{background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.25);color:var(--accent);}
+.price-alert.pricey{background:rgba(255,92,114,0.08);border:1px solid rgba(255,92,114,0.25);color:var(--red);}
+.price-alert.normal{background:rgba(108,99,255,0.08);border:1px solid rgba(108,99,255,0.25);color:#a09fff;}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:5;border-top:1px solid var(--border);background:var(--surface);padding:40px 28px 28px;}
+.footer-inner{max-width:900px;margin:0 auto;}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-bottom:28px;}
+.footer-logo{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
+.footer-logo span{color:var(--accent);}
+.footer-desc{color:var(--muted);font-size:0.8rem;line-height:1.6;max-width:260px;}
+.footer-col h4{font-family:'Syne',sans-serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:11px;}
+.footer-col a{display:block;color:var(--muted);font-size:0.82rem;text-decoration:none;margin-bottom:7px;cursor:pointer;transition:color 0.15s;}
+.footer-col a:hover{color:var(--accent);}
+.footer-div{height:1px;background:var(--border);margin-bottom:20px;}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.footer-copy{color:var(--muted);font-size:0.78rem;}
+.builder-credit{color:var(--muted);font-size:0.78rem;}
+.builder-credit strong{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="gotoSection('home')">Ride<span>Compare</span></div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="gotoSection('home')">Home</button>
+    <button class="nav-link" onclick="gotoSection('about')">About</button>
+    <button class="nav-link" onclick="gotoSection('contact')">Contact</button>
+    <button class="nav-cta" onclick="gotoSection('home')">📍 Bengaluru</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="home">
+  <section class="hero">
+    <div class="hero-badge"><span class="badge-dot"></span>Live Price Comparison</div>
+    <h1>Find the <em>cheapest ride</em><br>across every app</h1>
+    <p class="hero-sub">Compare Rapido, Uber, Ola, Namma Yatri, inDrive & BluSmart — in one place, instantly</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">517</div><div class="stat-lbl">Locations</div></div>
+      <div class="stat"><div class="stat-num">16+</div><div class="stat-lbl">Ride Options</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-lbl">Categories</div></div>
+      <div class="stat"><div class="stat-num">Free</div><div class="stat-lbl">Always</div></div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <!-- SURGE INDICATOR -->
+  <div class="surge-live" id="surgeBar">
+    <div class="surge-dot" id="surgeDot"></div>
+    <div class="surge-text" id="surgeText"></div>
+    <div class="surge-time" id="surgeTime"></div>
+  </div>
+
+  <!-- FAVOURITE ROUTES -->
+  <div class="fav-section" id="favSection" style="display:none">
+    <div class="fav-header">
+      <h4>⭐ Saved Routes</h4>
+    </div>
+    <div class="fav-list" id="favList"></div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <div class="input-group">
+        <div class="ac-wrap" id="pickup-wrap">
+          <div class="input-row" id="pickup-input-row">
+            <span class="iicon">📍</span>
+            <input type="text" id="pickup" placeholder="Pickup location in Bengaluru…" autocomplete="off"/>
+          </div>
+          <div class="pill" id="pickup-pill">
+            <span class="pill-ico">📍</span>
+            <span class="pill-txt" id="pickup-pill-txt"></span>
+            <button class="pill-x" onclick="clearLoc('pickup')">✕</button>
+          </div>
+          <div class="sug-dd" id="pickup-dd"></div>
+        </div>
+        <div class="connector"><div class="conn-line"></div></div>
+        <div class="ac-wrap" id="destination-wrap">
+          <div class="input-row" id="destination-input-row">
+            <span class="iicon">🏁</span>
+            <input type="text" id="destination" placeholder="Destination in Bengaluru…" autocomplete="off"/>
+          </div>
+          <div class="pill" id="destination-pill">
+            <span class="pill-ico">🏁</span>
+            <span class="pill-txt" id="destination-pill-txt"></span>
+            <button class="pill-x" onclick="clearLoc('destination')">✕</button>
+          </div>
+          <div class="sug-dd" id="destination-dd"></div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <button class="type-btn active" onclick="selType(this,'bike')"><span>🏍️</span>Bike</button>
+        <button class="type-btn" onclick="selType(this,'auto')"><span>🛺</span>Auto</button>
+        <button class="type-btn" onclick="selType(this,'economy')"><span>🚗</span>Car Economy</button>
+        <button class="type-btn" onclick="selType(this,'premium')"><span>🚙</span>Car Premium</button>
+        <button class="type-btn" onclick="selType(this,'parcel')"><span>📦</span>Parcel</button>
+      </div>
+      <button class="compare-btn" onclick="doCompare()">⚡ Compare Prices Now</button>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Comparing fares across all apps…</p>
+  </div>
+
+  <div class="results" id="results">
+    <div class="res-header">
+      <h2>Available Rides</h2>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div class="route-info" id="routeInfo"></div>
+        <button class="save-fav-btn" onclick="saveFavRoute()" title="Save this route">⭐ Save</button>
+        <button class="share-btn" onclick="shareRoute()">🔗 Share</button>
+      </div>
+    </div>
+    <div class="price-alert" id="priceAlert"></div>
+    <div class="savings-bar" id="savingsBar"></div>
+    <div class="app-list" id="appList"></div>
+    <p class="disclaimer" id="disclaimer"></p>
+  </div>
+
+  <div class="how-section">
+    <h3>How It Works</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><strong>Enter Route</strong><p>Type pickup & destination anywhere in Bengaluru</p></div>
+      <div class="step"><div class="step-num">2</div><strong>Choose Type</strong><p>Bike, Auto, Car Economy, Car Premium or Parcel</p></div>
+      <div class="step"><div class="step-num">3</div><strong>Compare & Book</strong><p>Prices ranked cheapest first — tap to open the app</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-label">About RideCompare</div>
+      <h2 class="section-title">Built for Bengaluru commuters</h2>
+      <p>Every day, millions of people in Bengaluru waste time switching between 5+ ride apps just to find the cheapest fare. RideCompare fixes that — compare all prices in under 3 seconds.</p>
+      <p>All fare data is sourced from official 2025 Karnataka rate cards. No login required, no ads, completely free.</p>
+      <div class="apps-chips">
+        <span class="app-chip">⚡ Rapido</span>
+        <span class="app-chip">🖤 Uber</span>
+        <span class="app-chip">🟡 Ola</span>
+        <span class="app-chip">🟢 Namma Yatri</span>
+        <span class="app-chip">🟣 inDrive</span>
+        <span class="app-chip">🔵 BluSmart</span>
+        <span class="app-chip">🔴 Porter</span>
+      </div>
+    </div>
+    <div class="about-cards">
+      <div class="acard"><div class="acard-icon">🎯</div><div><div class="acard-title">Accurate 2025 Fares</div><div class="acard-desc">Verified from official Karnataka rate cards — base fare, per-km, surge logic all correct.</div></div></div>
+      <div class="acard"><div class="acard-icon">⚡</div><div><div class="acard-title">Instant, No API</div><div class="acard-desc">All 517 locations load instantly in your browser. No internet calls, no delays.</div></div></div>
+      <div class="acard"><div class="acard-icon">📦</div><div><div class="acard-title">5 Categories</div><div class="acard-desc">Bike, Auto, Car Economy, Car Premium and Parcel delivery — everything covered.</div></div></div>
+      <div class="acard"><div class="acard-icon">🔒</div><div><div class="acard-title">100% Private</div><div class="acard-desc">No login, no tracking, no server. Your searches never leave your device.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-head">
+    <span class="section-label">Get in Touch</span>
+    <h2 class="section-title">We'd love to hear from you</h2>
+    <p>Found a fare error? Have a suggestion? Drop us a message below.</p>
+  </div>
+  <div class="cform-card">
+    <div id="contactForm">
+      <div class="form-grid">
+        <div class="ff">
+          <label>Your Name</label>
+          <input type="text" id="cName" placeholder="e.g. bharan teja"/>
+        </div>
+        <div class="ff">
+          <label>Your Email</label>
+          <input type="email" id="cEmail" placeholder="you@example.com"/>
+        </div>
+        <div class="ff full">
+          <label>Subject</label>
+          <select id="cSubject">
+            <option value="">Select a subject…</option>
+            <option>Fare price seems wrong</option>
+            <option>Add a new location</option>
+            <option>General feedback</option>
+            <option>Feature request</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="ff full">
+          <label>Your Message</label>
+          <textarea id="cMsg" placeholder="Tell us more…"></textarea>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="submitForm()">✉️ Send Message</button>
+    </div>
+    <div class="form-success" id="formSuccess">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Message Sent Successfully!</div>
+      <div class="success-sub">Thanks for reaching out. We'll get back to you as soon as possible.<br>We really appreciate your feedback — it helps make RideCompare better for everyone. 💚</div>
+      <button class="success-reset" onclick="resetForm()">Send another message</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="share-toast" id="shareToast">🔗 Link copied!</div>
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark">🌙</button>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">Ride<span>Compare</span></div>
+        <p class="footer-desc">The free, instant ride price comparison tool for Bengaluru. No login. No ads. Just savings.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <a onclick="gotoSection('home')">Home</a>
+        <a onclick="gotoSection('about')">About</a>
+        <a onclick="gotoSection('contact')">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Ride Apps</h4>
+        <a href="https://rapido.bike" target="_blank" rel="noopener">Rapido</a>
+        <a href="https://m.uber.com" target="_blank" rel="noopener">Uber</a>
+        <a href="https://book.olacabs.com" target="_blank" rel="noopener">Ola Cabs</a>
+        <a href="https://nammayatri.in" target="_blank" rel="noopener">Namma Yatri</a>
+        <a href="https://indrive.com" target="_blank" rel="noopener">inDrive</a>
+        <a href="https://blu-smart.com" target="_blank" rel="noopener">BluSmart</a>
+        <a href="https://porter.in" target="_blank" rel="noopener">Porter</a>
+      </div>
+    </div>
+    <div class="footer-div"></div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 RideCompare Bengaluru · BCA Final Year Project · Fare data from official 2025 Karnataka rate cards</div>
+      <div class="builder-credit">Built by <strong>Bharan Teja team</strong> ✨</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Nav & scroll ── */
+function gotoSection(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior:'smooth' });
+}
+window.addEventListener('scroll', function() {
+  var ids = ['home','about','contact'];
+  var links = document.querySelectorAll('.nav-link');
+  ids.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el || !links[i]) return;
+    var r = el.getBoundingClientRect();
+    if (r.top <= 70 && r.bottom > 70) {
+      links.forEach(function(l){ l.classList.remove('active'); });
+      links[i].classList.add('active');
+    }
+  });
+});
+
+/* ── Contact form ── */
+function submitForm() {
+  var name    = document.getElementById('cName').value.trim();
+  var email   = document.getElementById('cEmail').value.trim();
+  var subject = document.getElementById('cSubject').value;
+  var msg     = document.getElementById('cMsg').value.trim();
+
+  if (!name)                         { alert('Please enter your name.'); return; }
+  if (!email || !email.includes('@')){ alert('Please enter a valid email address.'); return; }
+  if (!subject)                      { alert('Please select a subject.'); return; }
+  if (!msg)                          { alert('Please write your message.'); return; }
+
+  // Disable button & show sending state
+  var btn = document.querySelector('.submit-btn');
+  btn.textContent = '⏳ Sending…';
+  btn.disabled = true;
+
+  // Send silently to bharantheja999@gmail.com via EmailJS (no redirect, no popup)
+  emailjs.send(
+    'service_78ygmcr',    // ← paste your EmailJS Service ID here
+    'template_8jq0p87',   // ← paste your EmailJS Template ID here
+    {
+      from_name:    name,
+      from_email:   email,
+      subject:      subject,
+      message:      msg,
+      to_email:     'bharantheja999@gmail.com'
+    }
+  ).then(function() {
+    // SUCCESS — show thank you screen
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }, function(error) {
+    // FAILED
+    btn.textContent = '✉️ Send Message';
+    btn.disabled = false;
+    alert('Sorry, message could not be sent. Please try again. (' + JSON.stringify(error) + ')');
+  });
+}
+function resetForm() {
+  document.getElementById('cName').value = '';
+  document.getElementById('cEmail').value = '';
+  document.getElementById('cSubject').value = '';
+  document.getElementById('cMsg').value = '';
+  document.getElementById('contactForm').style.display = 'block';
+  document.getElementById('formSuccess').style.display = 'none';
+}
+
+/* ================================================================
+   BENGALURU PLACES DATABASE — 517 locations
+   ================================================================ */
+var P = [
+  // ── Core Areas ──
+  {n:"Koramangala",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9279,lo:77.6271},
+  {n:"Indiranagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9784,lo:77.6408},
+  {n:"Whitefield",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9698,lo:77.7499},
+  {n:"Jayanagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9308,lo:77.5836},
+  {n:"JP Nagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9063,lo:77.5857},
+  {n:"HSR Layout",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9116,lo:77.6389},
+  {n:"BTM Layout",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9165,lo:77.6101},
+  {n:"Marathahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9591,lo:77.6972},
+  {n:"Bellandur",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9256,lo:77.6784},
+  {n:"Hebbal",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0450,lo:77.5938},
+  {n:"Yelahanka",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1005,lo:77.5963},
+  {n:"Rajaji Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9936,lo:77.5497},
+  {n:"Malleshwaram",a:"West Bengaluru",t:"Area",i:"🏘️",la:13.0034,lo:77.5653},
+  {n:"Basavanagudi",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9417,lo:77.5751},
+  {n:"Shivaji Nagar",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9866,lo:77.6001},
+  {n:"Frazer Town",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.6167},
+  {n:"Richmond Town",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9630,lo:77.6013},
+  {n:"Vasanth Nagar",a:"Central Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.5900},
+  {n:"Cox Town",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0050,lo:77.6200},
+  {n:"RT Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.5950},
+  {n:"Nagawara",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0480,lo:77.6230},
+  {n:"Thanisandra",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0650,lo:77.6350},
+  {n:"Devanahalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.2500,lo:77.7100},
+  {n:"Domlur",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.6400},
+  {n:"Ejipura",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9450,lo:77.6280},
+  {n:"Bommanahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.6400},
+  {n:"Varthur",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9380,lo:77.7400},
+  {n:"KR Puram",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0059,lo:77.6951},
+  {n:"Brookefield",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9620,lo:77.7100},
+  {n:"Banaswadi",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.6600},
+  {n:"HBR Layout",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0350,lo:77.6450},
+  {n:"Kammanahalli",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0150,lo:77.6500},
+  {n:"Sadashivanagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.5780},
+  {n:"Mathikere",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0250,lo:77.5580},
+  {n:"Peenya",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0280,lo:77.5230},
+  {n:"Jalahalli",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0480,lo:77.5320},
+  {n:"Vijayanagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5370},
+  {n:"Nagarbhavi",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9570,lo:77.5150},
+  {n:"RR Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9260,lo:77.5170},
+  {n:"Kengeri",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.4830},
+  {n:"Uttarahalli",a:"South-West Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.5480},
+  {n:"Hulimavu",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8730,lo:77.5980},
+  {n:"Begur",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8640,lo:77.6250},
+  {n:"Gottigere",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8530,lo:77.6060},
+  {n:"Chandapura",a:"South-East Bengaluru",t:"Area",i:"🏘️",la:12.8290,lo:77.6990},
+  {n:"Bommasandra",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8330,lo:77.6700},
+  {n:"Sarjapur",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.8600,lo:77.7200},
+  {n:"Hoskote",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.7980},
+  {n:"Doddaballapur",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.2980,lo:77.5370},
+  {n:"Nelamangala",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0960,lo:77.3990},
+  {n:"Majestic",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9775,lo:77.5713},
+  {n:"Yeshwanthpur",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0221,lo:77.5427},
+  {n:"Horamavu",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0230,lo:77.6490},
+  {n:"Ramamurthy Nagar",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.6700},
+  {n:"Hennur",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0480,lo:77.6374},
+  {n:"Kaggadasapura",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.6600},
+  {n:"New BEL Road",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.5700},
+  {n:"Banashankari",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9250,lo:77.5600},
+  {n:"Padmanabhanagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.5700},
+  {n:"Jigani",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.7770,lo:77.6350},
+  {n:"Anekal",a:"South-East Bengaluru",t:"Area",i:"🏘️",la:12.7100,lo:77.6960},
+  {n:"Hoodi",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.7100},
+  {n:"Mahadevapura",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9950,lo:77.7050},
+  {n:"Kalyan Nagar",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0350,lo:77.6400},
+  {n:"Panathur",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9350,lo:77.7050},
+  {n:"Kasavanahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.7000},
+  {n:"Harlur",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.6700},
+  {n:"Haralur Road",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8980,lo:77.6750},
+  {n:"Bellandur Outer Ring Road",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9256,lo:77.6784},
+  {n:"Electronic City Phase I",a:"South Bengaluru",t:"IT Hub",i:"💻",la:12.8458,lo:77.6660},
+  {n:"Electronic City Phase II",a:"South Bengaluru",t:"IT Hub",i:"💻",la:12.8380,lo:77.6730},
+  {n:"Sarjapur Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.9102,lo:77.6850},
+  {n:"Off Sarjapur Road",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.6900},
+  {n:"Marathahalli-Sarjapur Outer Ring Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.9352,lo:77.6890},
+  {n:"Outer Ring Road",a:"Bengaluru",t:"Road",i:"🛣️",la:12.9352,lo:77.6890},
+  {n:"Hosur Road",a:"South Bengaluru",t:"Road",i:"🛣️",la:12.8965,lo:77.6393},
+  {n:"Bannerghatta Road",a:"South Bengaluru",t:"Road",i:"🛣️",la:12.8826,lo:77.5970},
+  {n:"Kanakapura Road",a:"South Bengaluru",t:"Road",i:"🛣️",la:12.8977,lo:77.5534},
+  {n:"Mysore Road",a:"West Bengaluru",t:"Road",i:"🛣️",la:12.9542,lo:77.5310},
+  {n:"Tumkur Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.0235,lo:77.5406},
+  {n:"Bellary Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.0694,lo:77.5897},
+  {n:"Hennur Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.0337,lo:77.6374},
+  {n:"Old Airport Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.9592,lo:77.6473},
+  {n:"Old Madras Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:13.0059,lo:77.6530},
+  {n:"Magadi Road",a:"West Bengaluru",t:"Road",i:"🛣️",la:12.9700,lo:77.5300},
+  {n:"Hosa Road",a:"South Bengaluru",t:"Road",i:"🛣️",la:12.8900,lo:77.6600},
+  {n:"Doddaballapur Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.1500,lo:77.6300},
+  {n:"Thanisandra Main Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.0650,lo:77.6350},
+  {n:"Whitefield Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.9698,lo:77.7499},
+  {n:"ITPL Road",a:"Whitefield",t:"Road",i:"🛣️",la:12.9698,lo:77.7499},
+  {n:"Varthur Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.9380,lo:77.7400},
+  {n:"Begur Road",a:"South Bengaluru",t:"Road",i:"🛣️",la:12.8640,lo:77.6250},
+  {n:"Chandapura Anekal Road",a:"South-East Bengaluru",t:"Road",i:"🛣️",la:12.8290,lo:77.6990},
+  {n:"Soukya Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:13.0050,lo:77.7150},
+  {n:"IVC Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.1300,lo:77.6200},
+  {n:"Devanahalli Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.1500,lo:77.6800},
+  {n:"International Airport Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.1986,lo:77.7066},
+  {n:"Budigere Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:13.0500,lo:77.7800},
+  {n:"TC Palya Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:13.0050,lo:77.6800},
+  {n:"Wind Tunnel Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.9592,lo:77.6473},
+  {n:"Sarjapur Attibele Road",a:"South-East Bengaluru",t:"Road",i:"🛣️",la:12.8290,lo:77.6990},
+  {n:"Bannerghatta Jigani Road",a:"South Bengaluru",t:"Road",i:"🛣️",la:12.8012,lo:77.5763},
+  {n:"Attibele Anekal Road",a:"South-East Bengaluru",t:"Road",i:"🛣️",la:12.7780,lo:77.7700},
+  {n:"Hoskote Malur Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:13.0700,lo:77.7980},
+  {n:"Kolar Road",a:"South-East Bengaluru",t:"Road",i:"🛣️",la:12.9500,lo:77.8000},
+  {n:"Gunjur Mugalur Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.9100,lo:77.7200},
+  {n:"Sarjapur Bagalur Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.8600,lo:77.7200},
+  {n:"Uttarahalli Main Road",a:"South-West Bengaluru",t:"Road",i:"🛣️",la:12.8900,lo:77.5480},
+  {n:"Thavarekere Magadi Road",a:"West Bengaluru",t:"Road",i:"🛣️",la:12.9100,lo:77.5300},
+  {n:"Chikka Tirupathi Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:13.0500,lo:77.7800},
+  {n:"Malur Hosur Road",a:"South-East Bengaluru",t:"Road",i:"🛣️",la:12.8000,lo:77.8000},
+  {n:"Hesaraghatta Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.1300,lo:77.5000},
+  {n:"National Highway 207",a:"East Bengaluru",t:"Road",i:"🛣️",la:13.0700,lo:77.7980},
+  {n:"MG Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9756,lo:77.6099},
+  {n:"Brigade Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9719,lo:77.6094},
+  {n:"Residency Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9716,lo:77.6051},
+  {n:"Infantry Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9800,lo:77.6050},
+  {n:"Vittal Mallya Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9718,lo:77.5975},
+  {n:"Race Course Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9866,lo:77.5807},
+  {n:"Lavelle Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9683,lo:77.5980},
+  {n:"Langford Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9600,lo:77.6013},
+  {n:"Richmond Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9630,lo:77.6013},
+  {n:"Sankey Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.0100,lo:77.5780},
+  {n:"Cunningham Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9937,lo:77.5975},
+  {n:"Millers Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9937,lo:77.5975},
+  {n:"St Johns Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9800,lo:77.6050},
+  {n:"Haudin Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9800,lo:77.6050},
+  {n:"Wheeler Road",a:"North-East Bengaluru",t:"Road",i:"🛣️",la:13.0050,lo:77.6200},
+  {n:"Palace Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:13.0070,lo:77.5924},
+  {n:"Dodda Aalada Mara Road",a:"East Bengaluru",t:"Road",i:"🛣️",la:12.9592,lo:77.6473},
+  // ── Transport ──
+  {n:"Kempegowda International Airport",a:"Devanahalli",t:"Airport",i:"✈️",la:13.1986,lo:77.7066},
+  {n:"Bengaluru City Railway Station",a:"Majestic",t:"Railway",i:"🚉",la:12.9775,lo:77.5713},
+  {n:"Yeshwanthpur Junction",a:"Yeshwanthpur",t:"Railway",i:"🚉",la:13.0221,lo:77.5427},
+  {n:"Cantonment Railway Station",a:"Cantonment",t:"Railway",i:"🚉",la:12.9971,lo:77.6011},
+  {n:"KR Puram Railway Station",a:"KR Puram",t:"Railway",i:"🚉",la:13.0059,lo:77.6951},
+  {n:"Whitefield Railway Station",a:"Whitefield",t:"Railway",i:"🚉",la:12.9755,lo:77.7508},
+  {n:"Banaswadi Railway Station",a:"Banaswadi",t:"Railway",i:"🚉",la:13.0208,lo:77.6567},
+  {n:"Baiyyappanahalli Metro Station",a:"East Bengaluru",t:"Metro",i:"🚇",la:12.9948,lo:77.6529},
+  {n:"MG Road Metro Station",a:"Central Bengaluru",t:"Metro",i:"🚇",la:12.9756,lo:77.6099},
+  {n:"Indiranagar Metro Station",a:"Indiranagar",t:"Metro",i:"🚇",la:12.9784,lo:77.6408},
+  {n:"Whitefield Kadugodi Metro",a:"Whitefield",t:"Metro",i:"🚇",la:12.9698,lo:77.7499},
+  {n:"Majestic Metro Station",a:"Majestic",t:"Metro",i:"🚇",la:12.9775,lo:77.5713},
+  {n:"Yelachenahalli Metro",a:"South Bengaluru",t:"Metro",i:"🚇",la:12.8773,lo:77.5981},
+  {n:"Rajaji Nagar Metro",a:"West Bengaluru",t:"Metro",i:"🚇",la:12.9936,lo:77.5497},
+  {n:"Peenya Metro Station",a:"North-West Bengaluru",t:"Metro",i:"🚇",la:13.0280,lo:77.5230},
+  {n:"Silk Board Metro Station",a:"South Bengaluru",t:"Metro",i:"🚇",la:12.9175,lo:77.6229},
+  {n:"Electronic City Metro",a:"South Bengaluru",t:"Metro",i:"🚇",la:12.8399,lo:77.6770},
+  {n:"Hebbal Metro Station",a:"North Bengaluru",t:"Metro",i:"🚇",la:13.0450,lo:77.5938},
+  {n:"Nagasandra Metro",a:"North-West Bengaluru",t:"Metro",i:"🚇",la:13.0600,lo:77.5100},
+  {n:"Kengeri Metro Station",a:"West Bengaluru",t:"Metro",i:"🚇",la:12.9100,lo:77.4830},
+  {n:"Marathahalli Metro",a:"East Bengaluru",t:"Metro",i:"🚇",la:12.9591,lo:77.6972},
+  {n:"Majestic Bus Stand KSRTC",a:"Majestic",t:"Bus Stand",i:"🚌",la:12.9775,lo:77.5713},
+  {n:"Shivajinagar Bus Stand",a:"Shivajinagar",t:"Bus Stand",i:"🚌",la:12.9866,lo:77.6001},
+  {n:"Silk Board Bus Stop",a:"South Bengaluru",t:"Bus Stand",i:"🚌",la:12.9175,lo:77.6229},
+  // ── IT Parks ──
+  {n:"Manyata Tech Park",a:"Hebbal",t:"IT Park",i:"💻",la:13.0450,lo:77.5938},
+  {n:"Bagmane Tech Park",a:"Old Madras Road",t:"IT Park",i:"💻",la:13.0059,lo:77.6530},
+  {n:"ITPL International Tech Park",a:"Whitefield",t:"IT Park",i:"💻",la:12.9698,lo:77.7499},
+  {n:"Prestige Tech Park",a:"Sarjapur Road",t:"IT Park",i:"💻",la:12.9102,lo:77.6850},
+  {n:"Embassy Tech Village",a:"Outer Ring Road",t:"IT Park",i:"💻",la:12.9352,lo:77.6890},
+  {n:"RMZ Infinity",a:"Banaswadi",t:"IT Park",i:"💻",la:13.0200,lo:77.6600},
+  {n:"Ecospace Business Park",a:"Bellandur",t:"IT Park",i:"💻",la:12.9256,lo:77.6784},
+  {n:"Cessna Business Park",a:"Marathahalli",t:"IT Park",i:"💻",la:12.9591,lo:77.6972},
+  {n:"Global Village Tech Park",a:"Mysore Road",t:"IT Park",i:"💻",la:12.9542,lo:77.5310},
+  {n:"Wipro Campus",a:"Sarjapur Road",t:"IT Park",i:"💻",la:12.9102,lo:77.6850},
+  {n:"Infosys Campus",a:"Electronic City",t:"IT Park",i:"💻",la:12.8399,lo:77.6770},
+  {n:"Bagmane Constellation",a:"CV Raman Nagar",t:"IT Park",i:"💻",la:12.9850,lo:77.6600},
+  {n:"IBC Knowledge Park",a:"Bannerghatta Road",t:"IT Park",i:"💻",la:12.8826,lo:77.5970},
+  // ── Malls ──
+  {n:"Phoenix Marketcity",a:"Whitefield",t:"Mall",i:"🛍️",la:12.9699,lo:77.7011},
+  {n:"Forum Mall Koramangala",a:"Koramangala",t:"Mall",i:"🛍️",la:12.9342,lo:77.6110},
+  {n:"Orion Mall",a:"Rajaji Nagar",t:"Mall",i:"🛍️",la:13.0050,lo:77.5543},
+  {n:"Mantri Square Mall",a:"Malleshwaram",t:"Mall",i:"🛍️",la:13.0034,lo:77.5653},
+  {n:"UB City Mall",a:"Vittal Mallya Road",t:"Mall",i:"🛍️",la:12.9718,lo:77.5975},
+  {n:"Garuda Mall",a:"Magrath Road",t:"Mall",i:"🛍️",la:12.9671,lo:77.6064},
+  {n:"Royal Meenakshi Mall",a:"Bannerghatta Road",t:"Mall",i:"🛍️",la:12.8650,lo:77.5970},
+  {n:"VR Bengaluru",a:"Whitefield",t:"Mall",i:"🛍️",la:12.9671,lo:77.7489},
+  {n:"Lulu Mall Bengaluru",a:"Rajaji Nagar",t:"Mall",i:"🛍️",la:13.0050,lo:77.5500},
+  {n:"Elements Mall",a:"Thanisandra",t:"Mall",i:"🛍️",la:13.0650,lo:77.6350},
+  {n:"Vega City Mall",a:"BTM Layout",t:"Mall",i:"🛍️",la:12.9165,lo:77.6101},
+  {n:"Market Square Mall",a:"Marathahalli",t:"Mall",i:"🛍️",la:12.9591,lo:77.6972},
+  {n:"Commercial Street",a:"Central Bengaluru",t:"Shopping",i:"🛍️",la:12.9810,lo:77.6086},
+  {n:"Chickpet",a:"Old Bengaluru",t:"Shopping",i:"🛍️",la:12.9649,lo:77.5768},
+  {n:"KR Market",a:"South Bengaluru",t:"Market",i:"🛒",la:12.9649,lo:77.5768},
+  // ── Hospitals ──
+  {n:"Manipal Hospital Old Airport Road",a:"Old Airport Road",t:"Hospital",i:"🏥",la:12.9592,lo:77.6473},
+  {n:"Fortis Hospital Bannerghatta",a:"Bannerghatta Road",t:"Hospital",i:"🏥",la:12.8826,lo:77.5970},
+  {n:"Apollo Hospital",a:"Bannerghatta Road",t:"Hospital",i:"🏥",la:12.8869,lo:77.5957},
+  {n:"Narayana Health City",a:"Bommasandra",t:"Hospital",i:"🏥",la:12.8337,lo:77.6629},
+  {n:"Aster CMI Hospital",a:"Hebbal",t:"Hospital",i:"🏥",la:13.0450,lo:77.5938},
+  {n:"Sakra World Hospital",a:"Marathahalli",t:"Hospital",i:"🏥",la:12.9591,lo:77.6972},
+  {n:"St Johns Medical Hospital",a:"Koramangala",t:"Hospital",i:"🏥",la:12.9352,lo:77.6228},
+  {n:"Bowring Hospital",a:"Shivajinagar",t:"Hospital",i:"🏥",la:12.9764,lo:77.6001},
+  {n:"NIMHANS",a:"Hosur Road",t:"Hospital",i:"🏥",la:12.9433,lo:77.5958},
+  {n:"Victoria Hospital",a:"Fort",t:"Hospital",i:"🏥",la:12.9620,lo:77.5768},
+  {n:"Baptist Hospital",a:"Hebbal",t:"Hospital",i:"🏥",la:13.0450,lo:77.5938},
+  {n:"Cloudnine Hospital",a:"Jayanagar",t:"Hospital",i:"🏥",la:12.9308,lo:77.5836},
+  {n:"Sparsh Hospital",a:"Infantry Road",t:"Hospital",i:"🏥",la:12.9800,lo:77.6050},
+  {n:"Manipal Hospital Whitefield",a:"Whitefield",t:"Hospital",i:"🏥",la:12.9698,lo:77.7499},
+  {n:"Fortis Hospital Cunningham Road",a:"Cunningham Road",t:"Hospital",i:"🏥",la:12.9937,lo:77.5975},
+  // ── Universities & Colleges ──
+  {n:"Indian Institute of Science IISc",a:"Malleshwaram",t:"University",i:"🎓",la:13.0219,lo:77.5671},
+  {n:"IIM Bangalore",a:"Bannerghatta Road",t:"University",i:"🎓",la:12.9327,lo:77.5969},
+  {n:"RV College of Engineering",a:"JP Nagar",t:"College",i:"🎓",la:12.9232,lo:77.5011},
+  {n:"BMS College of Engineering",a:"Basavanagudi",t:"College",i:"🎓",la:12.9417,lo:77.5751},
+  {n:"PES University",a:"Electronic City",t:"University",i:"🎓",la:12.8399,lo:77.6770},
+  {n:"Christ University",a:"Hosur Road",t:"University",i:"🎓",la:12.9342,lo:77.6110},
+  {n:"Bangalore University",a:"Jnanabharathi",t:"University",i:"🎓",la:12.9521,lo:77.5011},
+  {n:"MS Ramaiah Institute of Technology",a:"Mathikere",t:"College",i:"🎓",la:13.0210,lo:77.5605},
+  {n:"Dayananda Sagar University",a:"Bannerghatta Road",t:"University",i:"🎓",la:12.9279,lo:77.5836},
+  {n:"Reva University",a:"Yelahanka",t:"University",i:"🎓",la:13.1005,lo:77.5963},
+  {n:"CMR University",a:"Banaswadi",t:"University",i:"🎓",la:13.0200,lo:77.6600},
+  {n:"Jain University",a:"Jayanagar",t:"University",i:"🎓",la:12.9308,lo:77.5836},
+  {n:"Mount Carmel College",a:"Vasanth Nagar",t:"College",i:"🎓",la:13.0000,lo:77.5900},
+  {n:"National Law School NLSIU",a:"Nagarbhavi",t:"University",i:"🎓",la:12.9570,lo:77.5150},
+  {n:"New Horizon College of Engineering",a:"Marathahalli",t:"College",i:"🎓",la:12.9591,lo:77.6972},
+  {n:"BMS Institute of Technology",a:"Yelahanka",t:"College",i:"🎓",la:13.1005,lo:77.5963},
+  {n:"JSS Academy of Technical Education",a:"Uttarahalli",t:"College",i:"🎓",la:12.8900,lo:77.5480},
+  {n:"Acharya Institute of Technology",a:"Soladevanahalli",t:"College",i:"🎓",la:13.0600,lo:77.5100},
+  {n:"East West College of Engineering",a:"Magadi Road",t:"College",i:"🎓",la:12.9700,lo:77.5300},
+  {n:"MSRCASC",a:"Mathikere",t:"College",i:"🎓",la:13.0210,lo:77.5605},
+  {n:"Seshadripuram College",a:"Seshadripuram",t:"College",i:"🎓",la:12.9937,lo:77.5700},
+  {n:"Presidency College",a:"St Marks Road",t:"College",i:"🎓",la:12.9720,lo:77.6030},
+  // ── Hotels ──
+  {n:"The Leela Palace Bengaluru",a:"HAL Airport Road",t:"Hotel",i:"🏨",la:12.9592,lo:77.6473},
+  {n:"ITC Windsor",a:"Golf Course Road",t:"Hotel",i:"🏨",la:12.9698,lo:77.5997},
+  {n:"Taj West End",a:"Race Course Road",t:"Hotel",i:"🏨",la:12.9866,lo:77.5807},
+  {n:"JW Marriott Bengaluru",a:"Vittal Mallya Road",t:"Hotel",i:"🏨",la:12.9718,lo:77.5975},
+  {n:"Shangri-La Bengaluru",a:"MG Road",t:"Hotel",i:"🏨",la:12.9756,lo:77.6099},
+  {n:"The Oberoi Bengaluru",a:"MG Road",t:"Hotel",i:"🏨",la:12.9756,lo:77.6099},
+  {n:"Vivanta Bengaluru",a:"Residency Road",t:"Hotel",i:"🏨",la:12.9716,lo:77.6051},
+  {n:"Courtyard by Marriott Hebbal",a:"Hebbal",t:"Hotel",i:"🏨",la:13.0450,lo:77.5938},
+  // ── Parks & Landmarks ──
+  {n:"Lalbagh Botanical Garden",a:"South Bengaluru",t:"Park",i:"🌳",la:12.9507,lo:77.5848},
+  {n:"Cubbon Park",a:"Central Bengaluru",t:"Park",i:"🌳",la:12.9793,lo:77.5929},
+  {n:"Bangalore Palace",a:"Vasanth Nagar",t:"Landmark",i:"🏰",la:13.0070,lo:77.5924},
+  {n:"Vidhana Soudha",a:"Central Bengaluru",t:"Landmark",i:"🏛️",la:12.9791,lo:77.5929},
+  {n:"Bannerghatta National Park",a:"South Bengaluru",t:"Park",i:"🦁",la:12.8012,lo:77.5763},
+  {n:"Ulsoor Lake",a:"Ulsoor",t:"Park",i:"🌊",la:12.9838,lo:77.6215},
+  {n:"Sankey Tank",a:"Sadashivanagar",t:"Park",i:"🌊",la:13.0100,lo:77.5780},
+  {n:"Hebbal Lake",a:"North Bengaluru",t:"Park",i:"🌊",la:13.0580,lo:77.5970},
+  {n:"Kaikondrahalli Lake",a:"Sarjapur Road",t:"Park",i:"🌊",la:12.9200,lo:77.6900},
+  {n:"Agara Lake",a:"HSR Layout",t:"Park",i:"🌊",la:12.9150,lo:77.6450},
+  {n:"Wonderla Amusement Park",a:"Mysore Road",t:"Tourist",i:"🎡",la:12.8504,lo:77.4780},
+  {n:"Nandi Hills",a:"Chikkaballapur",t:"Tourist",i:"⛰️",la:13.3702,lo:77.6835},
+  {n:"Tipu Sultan Summer Palace",a:"Fort",t:"Landmark",i:"🏰",la:12.9620,lo:77.5768},
+  {n:"Visvesvaraya Industrial Museum",a:"Central Bengaluru",t:"Landmark",i:"🏛️",la:12.9783,lo:77.5948},
+  {n:"HAL Aerospace Museum",a:"Old Airport Road",t:"Landmark",i:"✈️",la:12.9592,lo:77.6473},
+  {n:"Jawaharlal Nehru Planetarium",a:"Central Bengaluru",t:"Landmark",i:"🌟",la:12.9793,lo:77.5929},
+  // ── Temples ──
+  {n:"ISKCON Temple Bangalore",a:"Rajaji Nagar",t:"Temple",i:"🛕",la:13.0096,lo:77.5512},
+  {n:"Bull Temple Dodda Basavana Gudi",a:"Basavanagudi",t:"Temple",i:"🛕",la:12.9417,lo:77.5751},
+  {n:"Banashankari Temple",a:"Banashankari",t:"Temple",i:"🛕",la:12.9250,lo:77.5600},
+  {n:"Gavi Gangadhareshwara Temple",a:"Gavipuram",t:"Temple",i:"🛕",la:12.9400,lo:77.5700},
+  {n:"Kadu Malleshwara Temple",a:"Malleshwaram",t:"Temple",i:"🛕",la:13.0034,lo:77.5653},
+  {n:"Sri Dodda Ganapathi Temple",a:"Basavanagudi",t:"Temple",i:"🛕",la:12.9417,lo:77.5751},
+  {n:"Ulsoor Sri Someshwara Temple",a:"Ulsoor",t:"Temple",i:"🛕",la:12.9838,lo:77.6215},
+  // ── Stadiums ──
+  {n:"M Chinnaswamy Stadium",a:"MG Road",t:"Stadium",i:"🏏",la:12.9793,lo:77.5997},
+  {n:"Kanteerava Indoor Stadium",a:"Kasturba Road",t:"Stadium",i:"🏋️",la:12.9780,lo:77.5870},
+  {n:"Koramangala Indoor Stadium",a:"Koramangala",t:"Stadium",i:"🏸",la:12.9279,lo:77.6271},
+  // ── From provided list (all unique areas) ──
+  {n:"Doddenakundi",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.7000},
+  {n:"CV Raman Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9850,lo:77.6600},
+  {n:"Harlur Road",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.6700},
+  {n:"Kadugodi",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.7600},
+  {n:"Raja Rajeshwari Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.5050},
+  {n:"Kasturi Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0050,lo:77.6700},
+  {n:"Thubarahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9650,lo:77.7150},
+  {n:"Bilekahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.6050},
+  {n:"Yelahanka New Town",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1005,lo:77.5963},
+  {n:"AECS Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.7100},
+  {n:"Kadubeesanahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9400,lo:77.6950},
+  {n:"Jalahalli West",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0480,lo:77.5250},
+  {n:"Sahakara Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.5900},
+  {n:"Jakkur",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.5950},
+  {n:"Basaveshwara Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.5300},
+  {n:"Murugeshpalya",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9592,lo:77.6473},
+  {n:"HSR Layout Sector 2",a:"HSR Layout",t:"Area",i:"🏘️",la:12.9116,lo:77.6389},
+  {n:"HSR Layout Sector 1",a:"HSR Layout",t:"Area",i:"🏘️",la:12.9116,lo:77.6389},
+  {n:"HSR Layout Sector 3",a:"HSR Layout",t:"Area",i:"🏘️",la:12.9116,lo:77.6389},
+  {n:"HSR Layout Sector 4",a:"HSR Layout",t:"Area",i:"🏘️",la:12.9116,lo:77.6389},
+  {n:"HSR Layout Sector 5",a:"HSR Layout",t:"Area",i:"🏘️",la:12.9116,lo:77.6389},
+  {n:"HSR Layout Sector 6",a:"HSR Layout",t:"Area",i:"🏘️",la:12.9116,lo:77.6389},
+  {n:"HSR Layout Sector 7",a:"HSR Layout",t:"Area",i:"🏘️",la:12.9116,lo:77.6389},
+  {n:"Munnekollal",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9300,lo:77.6900},
+  {n:"JP Nagar Phase 1",a:"JP Nagar",t:"Area",i:"🏘️",la:12.9063,lo:77.5857},
+  {n:"JP Nagar Phase 2",a:"JP Nagar",t:"Area",i:"🏘️",la:12.9063,lo:77.5857},
+  {n:"JP Nagar Phase 3",a:"JP Nagar",t:"Area",i:"🏘️",la:12.9063,lo:77.5857},
+  {n:"JP Nagar Phase 4",a:"JP Nagar",t:"Area",i:"🏘️",la:12.9063,lo:77.5857},
+  {n:"JP Nagar Phase 5",a:"JP Nagar",t:"Area",i:"🏘️",la:12.9063,lo:77.5857},
+  {n:"JP Nagar Phase 6",a:"JP Nagar",t:"Area",i:"🏘️",la:12.9000,lo:77.5857},
+  {n:"JP Nagar Phase 7",a:"JP Nagar",t:"Area",i:"🏘️",la:12.8950,lo:77.5857},
+  {n:"JP Nagar Phase 8",a:"JP Nagar",t:"Area",i:"🏘️",la:12.8900,lo:77.5857},
+  {n:"JP Nagar Phase 9",a:"JP Nagar",t:"Area",i:"🏘️",la:12.8850,lo:77.5857},
+  {n:"Singasandra",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8950,lo:77.6150},
+  {n:"Kudlu Gate",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9050,lo:77.6500},
+  {n:"Kudlu",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9050,lo:77.6500},
+  {n:"Gunjur",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.7200},
+  {n:"Nagavara",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0480,lo:77.6230},
+  {n:"Babusa Palya",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0350,lo:77.6350},
+  {n:"Tavarekere BTM",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.5900},
+  {n:"Wilson Garden",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9500,lo:77.6050},
+  {n:"Vishweshwaraiah Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0050,lo:77.6800},
+  {n:"BEML Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9698,lo:77.7499},
+  {n:"MS Palya",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0250,lo:77.5580},
+  {n:"Kodihalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9592,lo:77.6400},
+  {n:"Pai Layout",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0150,lo:77.6600},
+  {n:"Cooke Town",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.6167},
+  {n:"Kumaraswamy Layout",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9150,lo:77.5600},
+  {n:"Seegehalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.7300},
+  {n:"GM Palya",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9300,lo:77.6300},
+  {n:"Devarachikkanahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.6200},
+  {n:"Malleshpalya",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9800,lo:77.6600},
+  {n:"Attibele",a:"South-East Bengaluru",t:"Area",i:"🏘️",la:12.7780,lo:77.7700},
+  {n:"Anjanapura",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.5600},
+  {n:"Kalkere",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0350,lo:77.6700},
+  {n:"Kengeri Satellite Town",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.4830},
+  {n:"Vignana Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.7050},
+  {n:"RMV 2nd Stage",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.5850},
+  {n:"B Narayanapura",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0350,lo:77.6600},
+  {n:"Benson Town",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.6050},
+  {n:"Akshayanagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8800,lo:77.6300},
+  {n:"Victoria Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9750,lo:77.6450},
+  {n:"Kodichikkanahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8950,lo:77.6100},
+  {n:"Basavanagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0050,lo:77.6800},
+  {n:"Dommasandra",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.7400},
+  {n:"Lingarajapuram",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.6400},
+  {n:"Mahalakshmi Layout",a:"West Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.5600},
+  {n:"Silk Board",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9175,lo:77.6229},
+  {n:"Nagondanahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.7200},
+  {n:"Yemalur",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9450,lo:77.6600},
+  {n:"Hebbal Kempapura",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0580,lo:77.5970},
+  {n:"Kothanur",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.5500},
+  {n:"Bagaluru",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1500,lo:77.6500},
+  {n:"Shanthi Nagar",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9650,lo:77.5980},
+  {n:"Basapura",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8800,lo:77.5900},
+  {n:"Maruthi Sevanagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.6500},
+  {n:"Doddakannalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8700,lo:77.6900},
+  {n:"HAL Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9592,lo:77.6473},
+  {n:"Horamavu Agara",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.6450},
+  {n:"OMBR Layout",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.6400},
+  {n:"Aavalahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9300,lo:77.5500},
+  {n:"Bannerghatta",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8012,lo:77.5763},
+  {n:"Battarahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.7100},
+  {n:"Kathriguppe",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.5750},
+  {n:"Bhoganhalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9400,lo:77.7100},
+  {n:"Jeevanbheema Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9800,lo:77.6500},
+  {n:"Hanumantha Nagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9500,lo:77.5600},
+  {n:"Hegde Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.6200},
+  {n:"Amrutha Halli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.5750},
+  {n:"Dasarahalli Hebbal",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.5150},
+  {n:"Srinivasa Nagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9400,lo:77.5650},
+  {n:"Kaval Byrasandra",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0150,lo:77.6500},
+  {n:"Abbigere",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0600,lo:77.5000},
+  {n:"Kanaka Nagar",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.6600},
+  {n:"Rachenahalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0680,lo:77.6200},
+  {n:"Adugodi",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9350,lo:77.6200},
+  {n:"Chandra Layout",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9950,lo:77.5200},
+  {n:"LB Shastri Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9750,lo:77.6600},
+  {n:"Chikka Banaswadi",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0250,lo:77.6600},
+  {n:"Bennigana Halli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.7000},
+  {n:"Belathur",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.7200},
+  {n:"Girinagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9300,lo:77.5600},
+  {n:"Ganga Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0350,lo:77.5850},
+  {n:"Kogilu",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0800,lo:77.6000},
+  {n:"Hongasandra",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9050,lo:77.5950},
+  {n:"Konanakunte",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8950,lo:77.5400},
+  {n:"Doddathoguru",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8700,lo:77.6700},
+  {n:"Panduranga Nagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.5900},
+  {n:"Chinnapanna Halli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.6800},
+  {n:"ISRO Layout",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9300,lo:77.5900},
+  {n:"Madiwala",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9175,lo:77.6229},
+  {n:"Siddapura",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9650,lo:77.7350},
+  {n:"Chamarajpet",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.5700},
+  {n:"Nandini Layout",a:"West Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.5450},
+  {n:"Mico Layout",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.6200},
+  {n:"Vijaya Bank Colony",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.5900},
+  {n:"Seshadripuram",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9937,lo:77.5700},
+  {n:"Ananth Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5100},
+  {n:"Garvebhavi Palya",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.6300},
+  {n:"Immadihalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9750,lo:77.7300},
+  {n:"Srinagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9500,lo:77.5400},
+  {n:"Sompura",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.8700,lo:77.7200},
+  {n:"Jakkasandra",a:"Koramangala",t:"Area",i:"🏘️",la:12.9279,lo:77.6271},
+  {n:"Chikkalasandra",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.5800},
+  {n:"Jayamahal",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.5950},
+  {n:"Dollars Colony",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0350,lo:77.5850},
+  {n:"Kempapura",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0580,lo:77.5970},
+  {n:"Dodda Banasvadi",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.6600},
+  {n:"Nandi Hills",a:"Chikkaballapur",t:"Tourist",i:"⛰️",la:13.3702,lo:77.6835},
+  {n:"Choodasandra",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9450,lo:77.7100},
+  {n:"Hesaraghatta",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1300,lo:77.5000},
+  {n:"Cambridge Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9784,lo:77.6408},
+  {n:"Kammasandra",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8330,lo:77.6700},
+  {n:"Roopena Agrahara",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.6200},
+  {n:"Rajanukunte",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1200,lo:77.5900},
+  {n:"RMV Extension",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0250,lo:77.5850},
+  {n:"T Dasarahalli",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.5100},
+  {n:"Maruthi Nagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.6000},
+  {n:"Ramagondanahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9800,lo:77.7300},
+  {n:"Chikbanavara",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0900,lo:77.5100},
+  {n:"Jalahalli Cross",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.5250},
+  {n:"Byrathi",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0550,lo:77.6600},
+  {n:"Jagadish Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.6800},
+  {n:"Hosakerehalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9400,lo:77.5500},
+  {n:"Subramanyapura",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.5400},
+  {n:"Neeladri Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.4900},
+  {n:"Sampangi Rama Nagar",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9650,lo:77.5950},
+  {n:"NRI Layout",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.6600},
+  {n:"Rayasandra",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8700,lo:77.6800},
+  {n:"Laggere",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.5300},
+  {n:"Srirampura",a:"West Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.5600},
+  {n:"Venkatapura",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9592,lo:77.6473},
+  {n:"RK Hegde Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.6500},
+  {n:"Langford Town",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.6013},
+  {n:"Viveka Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9500,lo:77.6350},
+  {n:"Chelekare",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0600,lo:77.5800},
+  {n:"Neelasandra",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9500,lo:77.6150},
+  {n:"Jagajeevanram Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.5500},
+  {n:"RMV",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.5850},
+  {n:"Carmelaram",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.7000},
+  {n:"Kartik Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.6900},
+  {n:"Mallathahalli",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.5100},
+  {n:"Hosapalaya",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.6100},
+  {n:"Thippasandra",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.6550},
+  {n:"Doddabommasandra",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1000,lo:77.6000},
+  {n:"Ullal",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.5050},
+  {n:"Vasanthapura",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8800,lo:77.5300},
+  {n:"Sudhama Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9592,lo:77.6473},
+  {n:"Richards Town",a:"Central Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.6100},
+  {n:"Jalahalli East",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0480,lo:77.5320},
+  {n:"Kodathi",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.7100},
+  {n:"Gattahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8700,lo:77.5700},
+  {n:"Balagere",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9500,lo:77.7300},
+  {n:"Kamaksipalya",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9800,lo:77.5300},
+  {n:"Chikka Tirupathi",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.7800},
+  {n:"Doddakallasandra",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.5800},
+  {n:"Bidadi",a:"South-West Bengaluru",t:"Area",i:"🏘️",la:12.8000,lo:77.3900},
+  {n:"Banashankari 3rd Stage",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.5600},
+  {n:"Banashankari 5th Stage",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.5600},
+  {n:"Kadugondanahalli",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.6500},
+  {n:"Andrahalli",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.5200},
+  {n:"Bagalakunte",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.5100},
+  {n:"Chikkaballapur",a:"Chikkaballapur District",t:"Area",i:"🏘️",la:13.4336,lo:77.7314},
+  {n:"Gauribidanur",a:"Chikkaballapur",t:"Area",i:"🏘️",la:13.6126,lo:77.5185},
+  {n:"Nagarbhavi Circle",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9570,lo:77.5150},
+  {n:"Annapurneshwari Nagar",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.5100},
+  {n:"Gandhi Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9780,lo:77.5600},
+  {n:"Ashok Nagar",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.5900},
+  {n:"Vittal Nagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.5900},
+  {n:"Yelachena Halli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8773,lo:77.5981},
+  {n:"Bhuvaneshwari Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.5800},
+  {n:"Kamanahalli",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0150,lo:77.6500},
+  {n:"Cholanayakanahalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.5700},
+  {n:"Nagadevanahalli",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5000},
+  {n:"Bidrahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.7300},
+  {n:"Bikasipura",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.5400},
+  {n:"Sunkadakatte",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9800,lo:77.5000},
+  {n:"Chikkajala",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1300,lo:77.6200},
+  {n:"Devinagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.5900},
+  {n:"Nayanda Halli",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.5200},
+  {n:"Kalena Agrahara",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.6000},
+  {n:"Kadabagere",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0800,lo:77.4900},
+  {n:"Guttahalli",a:"West Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.5700},
+  {n:"Attiguppe",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5400},
+  {n:"Bhoopasandra",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.6000},
+  {n:"Thurahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8800,lo:77.5600},
+  {n:"Nallurhalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9750,lo:77.7250},
+  {n:"Kacharakanahalli",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.6400},
+  {n:"Shettihalli",a:"West Bengaluru",t:"Area",i:"🏘️",la:13.0150,lo:77.5200},
+  {n:"Haragadde",a:"South-East Bengaluru",t:"Area",i:"🏘️",la:12.8300,lo:77.7100},
+  {n:"K Channasandra",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.7200},
+  {n:"Kannamangala",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.7500},
+  {n:"Byatarayanapura",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.5400},
+  {n:"Talaghattapura",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8600,lo:77.4900},
+  {n:"Boyalahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0600,lo:77.7600},
+  {n:"Hombegowda Nagar",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9400,lo:77.6100},
+  {n:"Rajiv Gandhi Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.5700},
+  {n:"Kamala Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.5800},
+  {n:"Kempegowda Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.5600},
+  {n:"Gubalala",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8600,lo:77.5800},
+  {n:"Medihalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.7400},
+  {n:"Chikkabellandur",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.7100},
+  {n:"Koralur",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0600,lo:77.7700},
+  {n:"Kattigenahalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1200,lo:77.6100},
+  {n:"Chikkabidarakallu",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.5050},
+  {n:"Silver Springs Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.7200},
+  {n:"Kaggalipura",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8200,lo:77.5400},
+  {n:"Dooravani Nagar",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.6700},
+  {n:"Prashanth Nagar",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.5200},
+  {n:"Kumbalgodu",a:"South-West Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.4900},
+  {n:"Munireddy Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.6750},
+  {n:"Baiyyappanahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9948,lo:77.6529},
+  {n:"Virupakshapura",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.5150},
+  {n:"Shankarapura",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5500},
+  {n:"Jaya Chamarajendra Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.5600},
+  {n:"Garudachar Palya",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.6800},
+  {n:"Narasapura",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0900,lo:77.7800},
+  {n:"Ramohalli",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9500,lo:77.4800},
+  {n:"Harohalli",a:"South-West Bengaluru",t:"Area",i:"🏘️",la:12.6400,lo:77.4000},
+  {n:"Anagalapura",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0800,lo:77.7700},
+  {n:"Chokkanahalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.6100},
+  {n:"Arasanakunte",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1500,lo:77.5500},
+  {n:"Bettahalasur",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1400,lo:77.6200},
+  {n:"Chikkakannalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9100,lo:77.7100},
+  {n:"Kallumantapa",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.8900,lo:77.7600},
+  {n:"Kothanoor",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8950,lo:77.5650},
+  {n:"Sampigehalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0800,lo:77.5900},
+  {n:"Tilak Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5400},
+  {n:"Dayananda Nagar",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.5700},
+  {n:"Soundarya Layout",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.5150},
+  {n:"Ragavendra Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9600,lo:77.5300},
+  {n:"Yelanahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8700,lo:77.6000},
+  {n:"Defence Colony Bagalagunte",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.5200},
+  {n:"Chintamani",a:"Chikkaballapur",t:"Area",i:"🏘️",la:13.4000,lo:78.0500},
+  {n:"Pattandur Agrahara",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9698,lo:77.7499},
+  {n:"Gollahalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1200,lo:77.5800},
+  {n:"Munireddypalya",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.6750},
+  {n:"Azad Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5400},
+  {n:"Rest House Road",a:"Central Bengaluru",t:"Road",i:"🛣️",la:12.9800,lo:77.6050},
+  {n:"Cottonpete",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5700},
+  {n:"Doddabele",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9000,lo:77.4700},
+  {n:"Craig Park Layout",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9784,lo:77.6408},
+  {n:"Vaderahalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0900,lo:77.6000},
+  {n:"Basavanna Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:13.0000,lo:77.5400},
+  {n:"Huttanahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8600,lo:77.6100},
+  {n:"Vijaypura",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0400,lo:77.7200},
+  {n:"Donnenahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8600,lo:77.5700},
+  {n:"Meenakunte",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1600,lo:77.6600},
+  {n:"Lingadheeranahalli",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.5000},
+  {n:"Sidlaghatta",a:"Chikkaballapur",t:"Area",i:"🏘️",la:13.3870,lo:77.8620},
+  {n:"Dabaspete",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.1300,lo:77.4000},
+  {n:"Kalasipalayam",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5700},
+  {n:"Singanahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0600,lo:77.7500},
+  {n:"Belatur",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.7700},
+  {n:"Garden Layout",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.9300,lo:77.6100},
+  {n:"Tippenahalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0800,lo:77.5900},
+  {n:"Nehru Nagar",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0050,lo:77.6450},
+  {n:"Venkateshpuram",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.6600},
+  {n:"Bapuji Nagar",a:"West Bengaluru",t:"Area",i:"🏘️",la:12.9700,lo:77.5500},
+  {n:"Bikkanahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.7600},
+  {n:"Doddenahalli",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0600,lo:77.7500},
+  {n:"Devasthanagalu",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1000,lo:77.5800},
+  {n:"Chikkabasavanapura",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0300,lo:77.7000},
+  {n:"Budihal",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.5100},
+  {n:"Madhava Nagar",a:"Central Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.5700},
+  {n:"Hullahalli",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.8500,lo:77.6200},
+  {n:"Ganapathihalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0600,lo:77.6200},
+  {n:"Solur",a:"North-West Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.4000},
+  {n:"Kunigal Road",a:"North-West Bengaluru",t:"Road",i:"🛣️",la:13.0200,lo:77.4000},
+  {n:"Kommaghatta",a:"South-West Bengaluru",t:"Area",i:"🏘️",la:12.9200,lo:77.5000},
+  {n:"Kanakapura",a:"South Bengaluru",t:"Area",i:"🏘️",la:12.5400,lo:77.4200},
+  {n:"Lal Bagh",a:"South Bengaluru",t:"Park",i:"🌳",la:12.9507,lo:77.5848},
+  {n:"Budigere",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0500,lo:77.7800},
+  {n:"Kaggadasapura",a:"East Bengaluru",t:"Area",i:"🏘️",la:12.9900,lo:77.6600},
+  {n:"Horamavu Agara",a:"North-East Bengaluru",t:"Area",i:"🏘️",la:13.0200,lo:77.6450},
+  {n:"Hosa Road",a:"South Bengaluru",t:"Road",i:"🛣️",la:12.8900,lo:77.6600},
+  {n:"Hennur Road",a:"North Bengaluru",t:"Road",i:"🛣️",la:13.0337,lo:77.6374},
+  {n:"Yelahanka New Town",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.1005,lo:77.5963},
+  {n:"Vidyaranyapura",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0700,lo:77.5600},
+  {n:"Kodigehalli",a:"North Bengaluru",t:"Area",i:"🏘️",la:13.0800,lo:77.5950},
+  {n:"Chansandra",a:"East Bengaluru",t:"Area",i:"🏘️",la:13.0100,lo:77.7200},
+];
+
+/* ── Search ── */
+function search(q) {
+  if (!q || q.length < 1) return [];
+  var ql = q.toLowerCase().trim();
+  return P.map(function(p) {
+    var nl = p.n.toLowerCase(), al = p.a.toLowerCase(), tl = p.t.toLowerCase();
+    var score = 0;
+    if (nl === ql) score = 100;
+    else if (nl.startsWith(ql)) score = 80;
+    else if (nl.includes(ql)) score = 60;
+    else if (al.startsWith(ql)) score = 40;
+    else if (al.includes(ql)) score = 25;
+    else if (tl.includes(ql)) score = 15;
+    else {
+      var words = ql.split(' ').filter(function(w){ return w.length > 1; });
+      var m = words.filter(function(w){ return nl.includes(w) || al.includes(w); });
+      if (m.length) score = m.length * 15;
+    }
+    return Object.assign({}, p, {score: score});
+  }).filter(function(p){ return p.score > 0; })
+    .sort(function(a,b){ return b.score - a.score; })
+    .slice(0, 8);
+}
+
+function hilite(text, q) {
+  if (!q) return text;
+  var i = text.toLowerCase().indexOf(q.toLowerCase());
+  if (i === -1) return text;
+  return text.slice(0,i) + '<em>' + text.slice(i, i+q.length) + '</em>' + text.slice(i+q.length);
+}
+
+/* ── State ── */
+var selected = { pickup: null, destination: null };
+var hiIdx = { pickup: -1, destination: -1 };
+var curRes = { pickup: [], destination: [] };
+var curType = 'bike';
+
+function showDD(fid, places, q) {
+  var dd = document.getElementById(fid+'-dd');
+  dd.innerHTML = '';
+  if (!places.length) {
+    dd.innerHTML = '<div class="no-res">No locations found — try another search.</div>';
+    dd.classList.add('open'); return;
+  }
+  places.forEach(function(p) {
+    var el = document.createElement('div');
+    el.className = 'sug-item';
+    el.innerHTML = '<div class="sug-ic">'+p.i+'</div>' +
+      '<div class="sug-txt"><div class="sug-name">'+hilite(p.n, q)+'</div>' +
+      '<div class="sug-area">'+p.a+', Bengaluru</div></div>' +
+      '<span class="sug-type-badge">'+p.t+'</span>';
+    el.addEventListener('mousedown', function(e){ e.preventDefault(); pickPlace(fid, p); });
+    dd.appendChild(el);
+  });
+  var ft = document.createElement('div');
+  ft.className = 'sug-footer'; ft.textContent = '📍 Bengaluru locations';
+  dd.appendChild(ft);
+  dd.classList.add('open');
+  hiIdx[fid] = -1;
+}
+
+function hideDD(fid) {
+  var dd = document.getElementById(fid+'-dd');
+  if (dd) dd.classList.remove('open');
+  hiIdx[fid] = -1;
+}
+
+function pickPlace(fid, place) {
+  selected[fid] = place;
+  document.getElementById(fid+'-input-row').style.display = 'none';
+  document.getElementById(fid+'-pill-txt').textContent = place.n + ', ' + place.a;
+  document.getElementById(fid+'-pill').classList.add('show');
+  document.getElementById(fid).value = place.n;
+  hideDD(fid);
+  if (fid === 'pickup') setTimeout(function(){ document.getElementById('destination').focus(); }, 80);
+}
+
+function clearLoc(fid) {
+  selected[fid] = null;
+  document.getElementById(fid).value = '';
+  document.getElementById(fid+'-input-row').style.display = '';
+  document.getElementById(fid+'-pill').classList.remove('show');
+  curRes[fid] = [];
+  document.getElementById('results').classList.remove('visible');
+  setTimeout(function(){ document.getElementById(fid).focus(); }, 50);
+}
+
+function updHi(fid) {
+  document.getElementById(fid+'-dd').querySelectorAll('.sug-item').forEach(function(el,i){
+    el.classList.toggle('hi', i === hiIdx[fid]);
+  });
+}
+
+function setupAC(fid) {
+  var inp = document.getElementById(fid);
+  inp.addEventListener('input', function(){
+    var q = this.value.trim();
+    if (!q) { hideDD(fid); return; }
+    curRes[fid] = search(q);
+    showDD(fid, curRes[fid], q);
+  });
+  inp.addEventListener('keydown', function(e){
+    var res = curRes[fid];
+    if (e.key==='ArrowDown'){ e.preventDefault(); hiIdx[fid]=Math.min(hiIdx[fid]+1, res.length-1); updHi(fid); }
+    else if (e.key==='ArrowUp'){ e.preventDefault(); hiIdx[fid]=Math.max(hiIdx[fid]-1, 0); updHi(fid); }
+    else if (e.key==='Enter'){ e.preventDefault(); if(hiIdx[fid]>=0&&res[hiIdx[fid]]) pickPlace(fid,res[hiIdx[fid]]); else if(fid==='destination') doCompare(); }
+    else if (e.key==='Escape') hideDD(fid);
+  });
+  inp.addEventListener('focus', function(){
+    if (this.value.trim().length >= 1 && curRes[fid].length) document.getElementById(fid+'-dd').classList.add('open');
+  });
+  inp.addEventListener('blur', function(){ setTimeout(function(){ hideDD(fid); }, 180); });
+}
+
+setupAC('pickup');
+setupAC('destination');
+document.addEventListener('click', function(e){
+  ['pickup','destination'].forEach(function(fid){
+    var w = document.getElementById(fid+'-wrap');
+    if (w && !w.contains(e.target)) hideDD(fid);
+  });
+});
+
+/* ── Type ── */
+function selType(btn, type) {
+  document.querySelectorAll('.type-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  curType = type;
+}
+
+var APPS = {
+  
+  bike: [
+    {n:'Rapido Bike',   e:'⚡', c:'#FFE234', bg:'#1a1500', t:'Bike Taxi',           ns:false, link:'https://rapido.bike',      sl:[{end:999,km:7}],   b:20,  mn:1.0, min:50,  pf:15},
+    {n:'Uber Moto',     e:'🖤', c:'#ffffff', bg:'#111111', t:'Moto',                ns:false, link:'https://m.uber.com',       sl:[{end:999,km:10}],  b:35,  mn:2.0, min:80,  pf:30},
+    {n:'Ola Bike',      e:'🟡', c:'#4CAF50', bg:'#0a1a0a', t:'Bike',                ns:false, link:'https://book.olacabs.com', sl:[{end:999,km:8}],   b:25,  mn:1.5, min:65,  pf:25},
+    {n:'Bounce E-Bike', e:'🟠', c:'#ff6b35', bg:'#1a0e05', t:'E-Bike',              ns:false, link:'https://bounce.bike',      sl:[{end:999,km:5}],   b:15,  mn:1.0, min:40,  pf:10},
+  ],
+  auto: [
+    {n:'Namma Yatri',   e:'🟢', c:'#76c442', bg:'#071a00', t:'Auto · Zero Fees · No Surge', ns:true, link:'https://nammayatri.in', sl:[{end:2,km:0},{end:999,km:18}], b:36, mn:0, min:36, pf:0},
+    {n:'Uber Auto',     e:'🖤', c:'#ffffff', bg:'#111111', t:'Auto',                ns:false, link:'https://m.uber.com',       sl:[{end:2,km:0},{end:999,km:18}], b:36, mn:2.0, min:90,  pf:30},
+    {n:'Ola Auto',      e:'🟡', c:'#4CAF50', bg:'#0a1a0a', t:'Auto',                ns:false, link:'https://book.olacabs.com', sl:[{end:2,km:0},{end:999,km:15}], b:30, mn:2.0, min:85,  pf:25},
+    {n:'Rapido Auto',   e:'⚡', c:'#FFE234', bg:'#1a1500', t:'Auto',                ns:false, link:'https://rapido.bike',      sl:[{end:2,km:0},{end:999,km:15}], b:30, mn:2.0, min:80,  pf:20},
+  ],
+  economy: [
+    {n:'Uber Go',       e:'🖤', c:'#ffffff', bg:'#111111', t:'Car Economy',          ns:false, link:'https://m.uber.com',       sl:[{end:999,km:17}],  b:42,  mn:2.0, min:175, pf:45},
+    {n:'Ola Mini',      e:'🟡', c:'#4CAF50', bg:'#0a1a0a', t:'Car Economy',          ns:false, link:'https://book.olacabs.com', sl:[{end:999,km:20}],  b:75,  mn:2.0, min:175, pf:40},
+    {n:'inDrive',       e:'🟣', c:'#bb86fc', bg:'#0d0015', t:'Negotiate · No Fees',  ns:true,  link:'https://indrive.com',      sl:[{end:999,km:16}],  b:80,  mn:1.0, min:120, pf:0},
+    {n:'BluSmart Go',   e:'🔵', c:'#2196F3', bg:'#00101a', t:'Electric · No Surge',  ns:true,  link:'https://blu-smart.com',    sl:[{end:999,km:18}],  b:75,  mn:1.5, min:175, pf:35},
+  ],
+  premium: [
+    {n:'Ola Prime Sedan',e:'🟡', c:'#4CAF50', bg:'#0a1a0a', t:'Car Premium',         ns:false, link:'https://book.olacabs.com', sl:[{end:999,km:28}],  b:115, mn:2.0, min:250, pf:50},
+    {n:'Uber Premier',  e:'🖤', c:'#ffffff', bg:'#111111', t:'Car Premium',           ns:false, link:'https://m.uber.com',       sl:[{end:999,km:25}],  b:100, mn:2.5, min:250, pf:50},
+    {n:'inDrive Sedan', e:'🟣', c:'#bb86fc', bg:'#0d0015', t:'Negotiate · No Fees',  ns:true,  link:'https://indrive.com',      sl:[{end:999,km:18}],  b:100, mn:1.5, min:150, pf:0},
+    {n:'BluSmart Prime',e:'🔵', c:'#2196F3', bg:'#00101a', t:'Electric · No Surge',  ns:true,  link:'https://blu-smart.com',    sl:[{end:999,km:22}],  b:110, mn:2.0, min:220, pf:45},
+  ],
+  parcel: [
+    {n:'Rapido Parcel',    e:'⚡', c:'#FFE234', bg:'#1a1500', t:'Bike Parcel',        ns:false, link:'https://rapido.bike',      sl:[{end:999,km:7}],   b:30,  mn:0,   min:55,  pf:15},
+    {n:'Porter Bike',      e:'🔴', c:'#e53935', bg:'#1a0505', t:'Bike Delivery',      ns:false, link:'https://porter.in',        sl:[{end:999,km:8}],   b:35,  mn:0,   min:60,  pf:10},
+    {n:'Porter Mini Truck',e:'🔴', c:'#e53935', bg:'#1a0505', t:'Mini Truck',         ns:true,  link:'https://porter.in',        sl:[{end:999,km:22}],  b:149, mn:0,   min:149, pf:0},
+    {n:'Uber Connect',     e:'🖤', c:'#ffffff', bg:'#111111', t:'Car Delivery',       ns:false, link:'https://m.uber.com',       sl:[{end:999,km:14}],  b:50,  mn:1.5, min:100, pf:35},
+  ],
+};
+
+/* ── Distance ── */
+function haversine(la1, lo1, la2, lo2) {
+  var R=6371, dL=(la2-la1)*Math.PI/180, dO=(lo2-lo1)*Math.PI/180;
+  var s1=Math.sin(dL/2), s2=Math.sin(dO/2);
+  var a=s1*s1+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*s2*s2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+/* ── Fare calc — handles tiered slabs + platform fee ── */
+function calcFare(distKm, etaMin, app) {
+  // Step 1: find how many km are included in base fare (slab km:0)
+  var includedKm = 0;
+  for (var i = 0; i < app.sl.length; i++) {
+    if (app.sl[i].km === 0) includedKm = app.sl[i].end;
+  }
+
+  // Step 2: calculate km cost for distance beyond included km
+  var remaining = Math.max(0, distKm - includedKm);
+  var kmCost = 0;
+  var prevEnd = includedKm;
+  for (var j = 0; j < app.sl.length; j++) {
+    if (app.sl[j].km === 0) { prevEnd = app.sl[j].end; continue; }
+    var slabKm = Math.min(remaining, app.sl[j].end - prevEnd);
+    if (slabKm <= 0) { prevEnd = app.sl[j].end; continue; }
+    kmCost += slabKm * app.sl[j].km;
+    remaining -= slabKm;
+    prevEnd = app.sl[j].end;
+    if (remaining <= 0) break;
+  }
+
+  // Step 3: add time cost + platform/convenience fee
+  var timeCost = etaMin * app.mn;
+  var platformFee = app.pf || 0;
+  var raw = app.b + kmCost + timeCost + platformFee;
+  var fare = Math.max(app.min, raw);
+
+  // Step 4: surge for non-no-surge apps (realistic random)
+  if (!app.ns) {
+    var hr = new Date().getHours();
+    var isPeak = (hr >= 8 && hr < 10) || (hr >= 17 && hr < 20);
+    var r = Math.random();
+    if (isPeak && r > 0.6)       fare = fare * 1.3;  // peak surge
+    else if (!isPeak && r > 0.85) fare = fare * 1.15; // mild off-peak surge
+  }
+
+  // Round to nearest ₹5
+  return Math.round(fare / 5) * 5;
+}
+
+/* ── Compare ── */
+function doCompare() {
+  var p = selected.pickup, d = selected.destination;
+  if (!p || !d) { alert('Please select both pickup and destination.'); return; }
+  if (p.n === d.n) { alert('Pickup and destination cannot be the same.'); return; }
+
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('loading').classList.add('visible');
+
+  var distRaw = haversine(p.la, p.lo, d.la, d.lo);
+  var distKm = Math.round(distRaw * 1.3 * 10) / 10;
+  var etaMin = Math.round((distKm / 20) * 60);
+
+  setTimeout(function() {
+    document.getElementById('loading').classList.remove('visible');
+    showPriceAlert(distKm);
+
+    var rides = APPS[curType].map(function(app) {
+      var price = calcFare(distKm, etaMin, app);
+      var eta = Math.round(distKm/20*60) + Math.floor(Math.random()*4) + 2;
+      return {n:app.n, e:app.e, c:app.c, bg:app.bg, t:app.t, ns:app.ns, link:app.link, price:price, eta:eta};
+    }).sort(function(a,b){ return a.price - b.price; });
+
+    var savings = rides[rides.length-1].price - rides[0].price;
+    var typeMap = {bike:'Bike',auto:'Auto',economy:'Car Economy',premium:'Car Premium',parcel:'Parcel'};
+
+    document.getElementById('routeInfo').innerHTML =
+      '<strong>'+p.n+'</strong> → <strong>'+d.n+'</strong> &nbsp;·&nbsp; ~'+distKm+' km · ~'+etaMin+' min';
+
+    document.getElementById('savingsBar').innerHTML = savings > 0
+      ? '💡 Book <strong>'+rides[0].n+'</strong> — save up to <strong>₹'+savings+'</strong> vs most expensive'
+      : '✅ All apps have similar pricing for this route';
+
+    var list = document.getElementById('appList');
+    list.innerHTML = '';
+
+    rides.forEach(function(ride, i) {
+      var best = (i === 0);
+      var hiPrice = Math.round((ride.price * 1.08) / 5) * 5;
+      var card = document.createElement('a');
+      card.href = ride.link; card.target = '_blank'; card.rel = 'noopener';
+      card.className = 'app-card' + (best ? ' best' : '');
+
+      var tags = '<div class="app-tags"><span class="app-tag tag-type">'+ride.t+'</span>';
+      if (ride.ns) tags += '<span class="app-tag tag-nosurge">✓ No Surge</span>';
+      tags += '</div>';
+
+      card.innerHTML =
+        (best ? '<div class="best-tag">Best Deal</div>' : '') +
+        '<div class="app-logo" style="background:'+ride.bg+';border:1px solid '+ride.c+'30">'+ride.e+'</div>' +
+        '<div class="app-info"><div class="app-name">'+ride.n+'</div>' +
+          '<div class="app-sub">~'+ride.eta+' min away</div>'+tags+'</div>' +
+        '<div class="app-price-col">' +
+          '<div class="app-price'+(best?' best-price':'')+'" >₹'+ride.price+'</div>' +
+          '<div class="price-range">₹'+ride.price+'–₹'+hiPrice+'</div>' +
+          '<div class="app-eta">'+ride.eta+' min ETA</div>' +
+        '</div>' +
+        '<button class="book-btn">Book →</button>';
+      list.appendChild(card);
+    });
+
+    document.getElementById('disclaimer').innerHTML =
+      '<strong>⚠️ Prices include platform/convenience fees. Always confirm in-app before booking.</strong><br>' +
+      '🏍 Rapido Bike ₹35 min · Uber Moto ₹60 min · Ola Bike ₹45 min<br>' +
+      '🛺 Namma Yatri ₹36 + ₹18/km (no fees, no surge) · Uber Auto ₹70 min · Ola Auto ₹65 min<br>' +
+      '🚗 Uber Go ₹130 min + ₹14/km · Ola Mini ₹135 min + ₹23/km · inDrive from ₹80 (negotiate)<br>' +
+      '🚙 Uber Premier ₹170 min + ₹22/km · Ola Prime ₹160 min + ₹28/km · BluSmart no surge<br>' +
+      '📦 Porter Bike ₹50 min · Porter Truck ₹149 base + ₹20/km · Uber Connect ₹80 min';
+
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 900);
+}
+
+/* ================================================================
+   FEATURE 1 — LIVE SURGE INDICATOR (time-of-day logic)
+   ================================================================ */
+function updateSurge() {
+  var hr  = new Date().getHours();
+  var min = new Date().getMinutes();
+  var dot  = document.getElementById('surgeDot');
+  var txt  = document.getElementById('surgeText');
+  var tEl  = document.getElementById('surgeTime');
+
+  var level, msg, tip;
+  // Bengaluru real peak hours
+  if ((hr >= 8 && hr < 10) || (hr >= 17 && hr < 20)) {
+    level = 'high';
+    msg   = '🔴 High surge active — prices are elevated right now';
+    tip   = 'Try waiting 20–30 min for fares to drop';
+  } else if ((hr >= 7 && hr < 8) || (hr >= 10 && hr < 11) || (hr >= 20 && hr < 22)) {
+    level = 'mid';
+    msg   = '🟠 Moderate surge — slightly higher than usual';
+    tip   = 'Prices may ease in ~15 min';
+  } else if (hr >= 0 && hr < 6) {
+    level = 'mid';
+    msg   = '🌙 Night hours — late-night charges may apply';
+    tip   = 'Some apps add 10–25% night surcharge';
+  } else {
+    level = 'low';
+    msg   = '🟢 No surge — great time to book!';
+    tip   = 'Normal fares across all apps';
+  }
+
+  dot.className = 'surge-dot ' + level;
+  txt.textContent = msg;
+  tEl.textContent = tip;
+}
+updateSurge();
+setInterval(updateSurge, 60000); // refresh every minute
+
+/* ================================================================
+   FEATURE 2 — FAVOURITE ROUTES (localStorage)
+   ================================================================ */
+function loadFavs() {
+  try { return JSON.parse(localStorage.getItem('rc_favs') || '[]'); } catch(e) { return []; }
+}
+function saveFavs(favs) {
+  try { localStorage.setItem('rc_favs', JSON.stringify(favs)); } catch(e) {}
+}
+function renderFavs() {
+  var favs = loadFavs();
+  var sec  = document.getElementById('favSection');
+  var list = document.getElementById('favList');
+  if (!favs.length) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+  list.innerHTML = '';
+  favs.forEach(function(f, i) {
+    var chip = document.createElement('div');
+    chip.className = 'fav-chip';
+    chip.innerHTML =
+      '<span>⭐</span>' +
+      '<span class="fc-route" title="' + f.from + ' → ' + f.to + '">' +
+        f.from.split(',')[0] + ' → ' + f.to.split(',')[0] +
+      '</span>' +
+      '<span class="fc-del" onclick="deleteFav(' + i + ');event.stopPropagation()">✕</span>';
+    chip.addEventListener('click', function() { loadFavRoute(f); });
+    list.appendChild(chip);
+  });
+}
+function saveFavRoute() {
+  var p = selected.pickup, d = selected.destination;
+  if (!p || !d) { alert('Please compare a route first, then save it.'); return; }
+  var favs = loadFavs();
+  // check duplicate
+  for (var i = 0; i < favs.length; i++) {
+    if (favs[i].fromN === p.n && favs[i].toN === d.n) {
+      alert('This route is already saved!'); return;
+    }
+  }
+  if (favs.length >= 8) { alert('Max 8 saved routes. Delete one first.'); return; }
+  favs.push({ from: p.n + ', ' + p.a, to: d.n + ', ' + d.a, fromN: p.n, toN: d.n, type: curType });
+  saveFavs(favs);
+  renderFavs();
+  // brief animation on button
+  var btn = document.querySelector('.save-fav-btn');
+  if (btn) { btn.textContent = '✅ Saved!'; setTimeout(function(){ btn.textContent = '⭐ Save'; }, 1500); }
+}
+function deleteFav(i) {
+  var favs = loadFavs(); favs.splice(i, 1); saveFavs(favs); renderFavs();
+}
+function loadFavRoute(f) {
+  // Find the place objects
+  var fromPlace = P.filter(function(p){ return p.n === f.fromN; })[0];
+  var toPlace   = P.filter(function(p){ return p.n === f.toN;   })[0];
+  if (!fromPlace || !toPlace) { alert('Location not found. It may have been removed.'); return; }
+  pickPlace('pickup',      fromPlace);
+  pickPlace('destination', toPlace);
+  // set type
+  document.querySelectorAll('.type-btn').forEach(function(b){ b.classList.remove('active'); });
+  var typeMap = {bike:0,auto:1,economy:2,premium:3,parcel:4};
+  var idx = typeMap[f.type] || 0;
+  document.querySelectorAll('.type-btn')[idx].classList.add('active');
+  curType = f.type || 'bike';
+  setTimeout(doCompare, 200);
+}
+renderFavs(); // render on load
+
+/* ================================================================
+   FEATURE 3 — PRICE ALERT SIMULATOR (time-based)
+   ================================================================ */
+function showPriceAlert(distKm) {
+  var hr    = new Date().getHours();
+  var alert = document.getElementById('priceAlert');
+  var msg   = '';
+  var cls   = '';
+
+  // Short route pricing check
+  if ((hr >= 8 && hr < 10) || (hr >= 17 && hr < 20)) {
+    cls = 'pricey';
+    msg = '⚠️ Peak hour — fares are 15–40% higher than usual. Try booking in 20 min.';
+  } else if (hr >= 23 || hr < 6) {
+    cls = 'pricey';
+    msg = '🌙 Night surcharge active — expect 10–25% higher fares on most apps.';
+  } else if (distKm < 4) {
+    cls = 'cheap';
+    msg = '💡 Short trip! Rapido Bike or Auto will be the cheapest option here.';
+  } else if (distKm > 20) {
+    cls = 'normal';
+    msg = '📍 Long route — inDrive lets you negotiate, often cheaper for 20km+ trips.';
+  } else {
+    cls = 'cheap';
+    msg = '✅ Off-peak time — you\'re getting the best prices right now!';
+  }
+
+  alert.className = 'price-alert show ' + cls;
+  alert.textContent = msg;
+}
+
+/* ================================================================
+   FEATURE 4 — DARK / LIGHT MODE TOGGLE
+   ================================================================ */
+function toggleTheme() {
+  var btn = document.getElementById('themeToggle');
+  if (document.body.classList.contains('light-mode')) {
+    document.body.classList.remove('light-mode');
+    btn.textContent = '🌙';
+    try { localStorage.setItem('rc_theme', 'dark'); } catch(e){}
+  } else {
+    document.body.classList.add('light-mode');
+    btn.textContent = '☀️';
+    try { localStorage.setItem('rc_theme', 'light'); } catch(e){}
+  }
+}
+// Load saved theme
+try {
+  if (localStorage.getItem('rc_theme') === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('themeToggle').textContent = '☀️';
+  }
+} catch(e) {}
+
+/* ================================================================
+   FEATURE 5 — SHARE ROUTE BUTTON
+   ================================================================ */
+function shareRoute() {
+  var p = selected.pickup, d = selected.destination;
+  if (!p || !d) { alert('Compare a route first, then share it.'); return; }
+  var base = window.location.href.split('?')[0];
+  var url  = base + '?from=' + encodeURIComponent(p.n) + '&to=' + encodeURIComponent(d.n) + '&type=' + curType;
+  // Copy to clipboard
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() { showToast(); });
+  } else {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = url;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast();
+  }
+}
+function showToast() {
+  var t = document.getElementById('shareToast');
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+}
+
+// Auto-fill from URL params on load
+(function() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var fromQ  = params.get('from');
+    var toQ    = params.get('to');
+    var typeQ  = params.get('type');
+    if (fromQ && toQ) {
+      var fromP = P.filter(function(p){ return p.n.toLowerCase() === fromQ.toLowerCase(); })[0];
+      var toP   = P.filter(function(p){ return p.n.toLowerCase() === toQ.toLowerCase();   })[0];
+      if (fromP && toP) {
+        setTimeout(function(){
+          pickPlace('pickup', fromP);
+          pickPlace('destination', toP);
+          if (typeQ) {
+            var typeMap = {bike:0,auto:1,economy:2,premium:3,parcel:4};
+            var idx = typeMap[typeQ] || 0;
+            document.querySelectorAll('.type-btn').forEach(function(b){ b.classList.remove('active'); });
+            document.querySelectorAll('.type-btn')[idx].classList.add('active');
+            curType = typeQ;
+          }
+          doCompare();
+        }, 300);
+      }
+    }
+  } catch(e) {}
+})();
+
+</script>
+</body>
+</html>
